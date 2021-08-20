@@ -1,6 +1,7 @@
 //! Conversion to and from ipld.
 use crate::cid::Cid;
 use crate::ipld::Ipld;
+use crate::codec::{Codec, Decode, Encode};
 use std::collections::BTreeMap;
 
 macro_rules! derive_to_ipld_prim {
@@ -58,3 +59,15 @@ derive_to_ipld!(StringMap, BTreeMap<String, Ipld>, to_owned);
 derive_to_ipld!(IntegerMap, BTreeMap<i64, Ipld>, to_owned);
 derive_to_ipld_generic!(Link, Cid, clone);
 derive_to_ipld_generic!(Link, &Cid, to_owned);
+
+impl<C: Codec, T: Encode<C>> Encode<C> for Box<T> {
+    fn encode<W: std::io::Write>(&self, c: C, w: &mut W) -> anyhow::Result<()> {
+        (**self).encode(c, w)
+    }
+}
+
+impl<C: Codec, T: Decode<C>> Decode<C> for Box<T> {
+    fn decode<R: std::io::Read + std::io::Seek>(c: C, r: &mut R) -> anyhow::Result<Self> {
+        T::decode(c, r).map(|ok| Box::new(ok))
+    }
+}

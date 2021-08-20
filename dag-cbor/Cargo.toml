@@ -14,6 +14,7 @@ unleashed = ["libipld-core/unleashed"]
 byteorder = "1.4.3"
 libipld-core = { version = "0.12.0", path = "../core" }
 thiserror = "1.0.25"
+bitvec = "0.22.3"
 
 [dev-dependencies]
 hex = "0.4.3"

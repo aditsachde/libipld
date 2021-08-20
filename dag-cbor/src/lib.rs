@@ -9,6 +9,7 @@ pub use libipld_core::error::{Result, UnsupportedCodec};
 pub mod decode;
 pub mod encode;
 pub mod error;
+pub mod bitvec;
 
 /// CBOR codec.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, PartialOrd, Ord)]
